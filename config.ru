@@ -8,7 +8,7 @@ Rails.application.load_server
 require 'rack/cors'
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
  allow do
-   origins 'localhost:3000'
+   origins 'http://localhost:3000'
    resource '*',
        headers: :any,
        methods: [ :get, :post, :delete, :put, :options ]
