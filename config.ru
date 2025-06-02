@@ -6,8 +6,7 @@ run Rails.application
 Rails.application.load_server
 
 require 'rack/cors'
-use Rack::Cors do
- # allow all origins in development
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
  allow do
    origins '*localhost:3000'
    resource '*',
