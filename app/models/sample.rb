@@ -2,5 +2,4 @@ class Sample < ApplicationRecord
   belongs_to :user
 
   validates :name, presence: true, length: { maximum: 24 }
-  validates :audio_url, presence: true
 end
