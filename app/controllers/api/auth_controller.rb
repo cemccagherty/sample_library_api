@@ -7,7 +7,7 @@ class Api::AuthController < ApplicationController
       token = JsonWebToken.encode(user_id: user.id)
       render json: { token: token, user: user }, status: :ok
     else
-      render json: { error: "Invalid credentials" }, status: :unauthorized
+      render json: { error: "Invalid credentials" }, status: :unauthorized # returns HTTP 401
     end
   end
 
