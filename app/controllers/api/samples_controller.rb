@@ -28,7 +28,7 @@ class Api::SamplesController < ApplicationController
     end
   end
 
-  def desroy
+  def destroy
     @sample.destroy
     head :no_content # returns HTTP 204 "no content"
   end
