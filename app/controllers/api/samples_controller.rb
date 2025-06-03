@@ -1,6 +1,9 @@
 class Api::SamplesController < ApplicationController
   before_action :set_sample, only: [ :show, :update, :destroy ]
 
+  MAX_FILE_SIZE = 10.megabytes
+  ALLOWED_FILE_TYPES = [ "audio/mpeg", "audio/wav", "audio/x-wav", "audio/mp3" ]
+
   def index
     @samples = @current_user.samples
     render json: @samples
@@ -11,8 +14,21 @@ class Api::SamplesController < ApplicationController
   end
 
   def create
+    upload_file = sample_params[:audio]
+
+    unless upload_file && ALLOWED_FILE_TYPES.include?(upload_file.content_type)
+      return render json: { error: "MP3 or WAV only" }, status: :unprocessable_entity
+    end
+
+    if upload_file.size > MAX_FILE_SIZE
+      return render json: { error: "Upload size maximum: 10MB" }, status: :unprocessable_entity
+    end
+
+    # audio upload file validations done here to validate prior to upload to cloudinary.
+
     @sample = Sample.new(sample_params)
     @sample.user = @current_user
+
     if @sample.save
       render json: @sample, status: :created # returns HTTP 201
     else
@@ -41,6 +57,6 @@ class Api::SamplesController < ApplicationController
   end
 
   def sample_params
-    params.require(:sample).permit(:name, :audio_url)
+    params.require(:sample).permit(:name, :audio)
   end
 end
